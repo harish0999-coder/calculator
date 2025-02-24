@@ -1,87 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid black;
-  text-align: center;
-  padding: 8px;
-}
-
-th {
-  background-color: #dddddd;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+        }
+        .month {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .month h2 {
+            margin: 0;
+            background: #007BFF;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .day {
+            padding: 5px;
+            background: #f4f4f4;
+            border-radius: 5px;
+        }
+        .day.header {
+            font-weight: bold;
+            background: #007BFF;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-
-<h2>2025 Calendar</h2>
-
-<table id="calendar"></table>
-
-<script>
-function createCalendar() {
-  const calendarEl = document.getElementById("calendar");
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-  for (let month = 0; month < 12; month++) {
-    let date = 1;
-    let firstDay = (new Date(2025, month)).getDay(); // 0:Sun, 1:Mon, ...
-
-    // Create table rows for the month
-    let tableRows = "";
-    let daysInWeek = 0;
-    while (date <= daysInMonth[month] || daysInWeek < 7) {
-      if (daysInWeek === 0) {
-        tableRows += "<tr>";
-      }
-      if (date === 1 && daysInWeek < firstDay) {
-        tableRows += "<td></td>";
-      } else if (date <= daysInMonth[month]) {
-        tableRows += `<td>${date}</td>`;
-        date++;
-      } else {
-        tableRows += "<td></td>";
-      }
-
-      daysInWeek++;
-      if (daysInWeek === 7) {
-        tableRows += "</tr>";
-        daysInWeek = 0;
-      }
-    }
-
-    // Add month header and rows to the table
-    calendarEl.innerHTML += `
-      <thead>
-        <tr>
-          <th colspan="7">${months[month]}</th>
-        </tr>
-        <tr>
-          <th>Sun</th>
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thu</th>
-          <th>Fri</th>
-          <th>Sat</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${tableRows}
-      </tbody>`;
-  }
-}
-
-createCalendar();
-</script>
-
+    <h1>2025 Calendar</h1>
+    <div class="calendar" id="calendar"></div>
+    
+    <script>
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        
+        function generateCalendar() {
+            const calendarContainer = document.getElementById("calendar");
+            calendarContainer.innerHTML = "";
+            
+            for (let month = 0; month < 12; month++) {
+                const monthDiv = document.createElement("div");
+                monthDiv.classList.add("month");
+                monthDiv.innerHTML = `<h2>${months[month]}</h2>`;
+                
+                const daysDiv = document.createElement("div");
+                daysDiv.classList.add("days");
+                
+                daysOfWeek.forEach(day => {
+                    const dayHeader = document.createElement("div");
+                    dayHeader.classList.add("day", "header");
+                    dayHeader.textContent = day;
+                    daysDiv.appendChild(dayHeader);
+                });
+                
+                let firstDay = new Date(2025, month, 1).getDay();
+                let daysInMonth = new Date(2025, month + 1, 0).getDate();
+                
+                for (let i = 0; i < firstDay; i++) {
+                    let emptyCell = document.createElement("div");
+                    emptyCell.classList.add("day");
+                    daysDiv.appendChild(emptyCell);
+                }
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    let dayCell = document.createElement("div");
+                    dayCell.classList.add("day");
+                    dayCell.textContent = day;
+                    daysDiv.appendChild(dayCell);
+                }
+                
+                monthDiv.appendChild(daysDiv);
+                calendarContainer.appendChild(monthDiv);
+            }
+        }
+        
+        generateCalendar();
+    </script>
 </body>
 </html>
-
