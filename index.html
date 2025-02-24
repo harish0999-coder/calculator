@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid black;
+  text-align: center;
+  padding: 8px;
+}
+
+th {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h2>2025 Calendar</h2>
+
+<table id="calendar"></table>
+
+<script>
+function createCalendar() {
+  const calendarEl = document.getElementById("calendar");
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  for (let month = 0; month < 12; month++) {
+    let date = 1;
+    let firstDay = (new Date(2025, month)).getDay(); // 0:Sun, 1:Mon, ...
+
+    // Create table rows for the month
+    let tableRows = "";
+    let daysInWeek = 0;
+    while (date <= daysInMonth[month] || daysInWeek < 7) {
+      if (daysInWeek === 0) {
+        tableRows += "<tr>";
+      }
+      if (date === 1 && daysInWeek < firstDay) {
+        tableRows += "<td></td>";
+      } else if (date <= daysInMonth[month]) {
+        tableRows += `<td>${date}</td>`;
+        date++;
+      } else {
+        tableRows += "<td></td>";
+      }
+
+      daysInWeek++;
+      if (daysInWeek === 7) {
+        tableRows += "</tr>";
+        daysInWeek = 0;
+      }
+    }
+
+    // Add month header and rows to the table
+    calendarEl.innerHTML += `
+      <thead>
+        <tr>
+          <th colspan="7">${months[month]}</th>
+        </tr>
+        <tr>
+          <th>Sun</th>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>`;
+  }
+}
+
+createCalendar();
+</script>
+
+</body>
+</html>
+
